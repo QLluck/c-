@@ -9,42 +9,58 @@
 #include<string.h>
 #include<stdbool.h>
 //------------------------
+//宏定义处 
+//string lne 字符串长度
+#define STRINGLEN 100
 //类定义处-------------------
-struct student
-{  //用于标记是否为学生账号
-   int login;
-   //用户名
-   char userName[100] ;
-   //密码
-   char code[100] ;
-   char name[100] ;
+// struct student
+// {  //用于标记是否为学生账号
+//    int login;
+//    //用户名
+//    char userName[100] ;
+//    //密码
+//    char code[100] ;
+//    char name[100] ;
 
    
 
 
-};
-struct teacher
-{ 
-   int login;
-   //用户名
-   char userName[100] ;
-   //密码
-   char code[100] ;
-   char name[100] ;
+// };
+// struct teacher
+// { 
+//    int login;
+//    //用户名
+//    char userName[100] ;
+//    //密码
+//    char code[100] ;
+//    char name[100] ;
 
-   teacher() : login(0) {} // Constructor to initialize login
-};
-struct op
+//    teacher() : login(0) {} // Constructor to initialize login
+// };
+struct Date
 {
-    int login ;
+      int login;
+   //用户名
+   char userName[STRINGLEN] ;
+   //密码
+   char code[STRINGLEN] ;
+   char name[STRINGLEN] ;
+
 
 };
+// struct op
+// {
+//     int login ;
+
+// };
 struct accout
 {     
-      student student ;
-      teacher teacher ;
-       op op ;
+      // student student ;
+      // teacher teacher ;
+      //  op op ;
        //实现链表
+       //date数据
+       Date date ;
        accout * next ;
 
 
@@ -55,12 +71,13 @@ void menuLogin();
 void loginChoose() ;
 int checkFileEmpty() ;
 void TimeOut();
-int login(int choose);
+int login();
 void Recover() ;
 void Inital() ;
 int RepeatUsername(char userName[] );
-void ListAccoutAdd(accout * TempAdd) ;
+void ListAccoutAdd(accout  TempAdd) ;
 void Register();
+struct accout*ListBack(struct accout*p1 );
 //-------------------------
 //全局变量定义处---------------------
 accout *head,*p,*tail ;
@@ -69,6 +86,95 @@ accout *head,*p,*tail ;
 
 //-------------------------
 //函数定义处---------------------------
+//链表功能及操作函数
+//通过用户名来查找p指针 返回
+struct accout* FoundList()
+{
+    //
+    printf("请输入用户名\n");
+    char str[STRINGLEN] ;
+    scanf("%s",str) ;
+    p =head->next ;
+    
+     while(p!=NULL)
+     {
+        if(strcmp(p->date.userName,str)==0)
+        {
+           return p ;
+
+        }
+       
+        p=p->next ;
+     }
+     return NULL ;
+}
+//链表长度 返回链表数据个数
+int ListLen()
+{
+  p = head->next ;
+  int sum = 0 ;
+  if(p!=NULL)
+  {
+    p=p->next ;
+    sum++ ;
+  }
+  return sum ;
+}
+//链表删除 成功返回上一个指针
+ struct accout * ListDelte()
+{     struct accout*p1 ;
+
+     if(! (p1= FoundList() ))//通过名字查找
+     {
+        return NULL ;//查找失败
+     }
+     p1 = ListBack(p1) ;
+     struct accout *temp = p1->next ;
+     p1->next = temp->next ;
+     free(temp) ;
+     printf("删除成功!\n") ;
+     return p ;
+     
+}
+//实现链表的上一个位
+struct accout*ListBack(struct accout*p1 )
+{
+     if(p1 ==head) return NULL ;
+     p = head ;
+     while(p->next!=p1)p=p->next ;
+     return p ;
+}
+
+//交换相邻两个链表数据 //注意不能为//失败返回 0;
+int SwapList(struct accout *p1 ,struct accout*p2 )
+{
+     //锁头锁尾
+     if(p1==head||p1==NULL||p2==head||p2==NULL)return 0 ;
+     if( !(p1=ListBack(p1))) return 0 ;
+     if( p2->next==NULL ) 
+     { p2 = ListBack(p2) ;
+       p2->next = p1->next ;
+       p1->next->next = NULL ;
+       tail = p1->next ;
+       p1->next = p2; 
+       return 1 ;
+     } 
+     p1->next->next = p2->next ;
+     p2 ->next = p1->next ;
+     p1->next = p2 ;
+     return 1; 
+}
+//
+
+//高级链表文件读入
+void FileListRead(struct accout * temp , FILE*fp)
+{
+
+}
+
+
+
+
 
 //第一部分登录与初始化函数-------------------
 //实现按任意键退出
@@ -86,8 +192,8 @@ void menuLogin()
      printf("\n\n");
       printf("--------------欢迎来到学生信息管理系统------------\n");
       printf("--------------------------------------------------\n");
-      printf("------------------按1登录学生账号-----------------\n");
-      printf("------------------按2登录教师账号-----------------\n");
+      printf("------------------按1登录账号---------------------\n");
+      printf("------------------------------------------------\n");
       printf("------------------按3注册账号---------------------\n");
       printf("------------------按0退出系统-----------------------\n");
       printf("--------------------------------------------------\n");
@@ -111,39 +217,32 @@ loginChooseCina :
 
       
         case  1 :
-        if(login(1))
-        {
-          printf("登录成功\n") ;
-          printf("欢迎学生%s",p->student.userName) ;
-         printf("正在访问学生界面\n") ;
-           printf("按任意键继续\n") ;
-          TimeOut() ;
-          
-        }
-        else
-        {
 
-        }
+      if(  login() ) 
+      {
+       int  login = p->date.login ;
+      switch(login)
+      {
+         case 1 :
+   //教师界面函数
+          break ;
+                    
+        case  2 :
+          //教师界面函数调用    
+           break ;
+
+      }
+      }
+    
+      break ;
+          
+       
+        
           
            //printf("按任意键继续\n") ;
            //TimeOut();
-           break ;
-        case  2 :
-          
-           if(login(2))
-        {
-          printf("登录成功\n") ;
-          printf("欢迎教师 %s " , p->teacher.userName) ;
-          printf("正在访问教师界面\n") ;
-          printf("按任意键继续\n") ;
-          TimeOut() ;
-          
-        }
-        else
-        {
-
-        }
-           break ;
+           
+ 
         case  3 :
            Register();
           printf("注册成功\n") ;
@@ -160,21 +259,7 @@ loginChooseCina :
 
            return ;
            break ;
-           case 666666 :
-           //printf("欢迎来到管理员界面") ;
-           if(opLogin())
-           {  
-              opMenuChoose() ;
-           }
-           else
-           {
-              
-              break ;
-           }
            
-
-           
-           break ;
         default:
         printf("请您输入正常的选项\n") ;
         goto loginChooseCina ;
@@ -186,7 +271,7 @@ loginChooseCina :
 }
 //登录功能
 //原理通过用户名来检查链表数据 如果对的话 p指向账号
-int login(int choose)
+int login()
 {    //检测第一次
   //    FILE*fp =fopen("//Users//jack5//c语言项目//学生信息管理系统//accout","r") ;
   //    if(fp==NULL)
@@ -202,20 +287,18 @@ int login(int choose)
   //       return 0;
   //    }
   //  fclose(fp) ;
-     p=head ;
-     char str[1000] ;
-     char userName[1000] ;
-     char code[1000] ;
+     p=head->next ;
+     char str[STRINGLEN] ;
+     char userName[STRINGLEN] ;
+     char code[STRINGLEN] ;
     
          printf("请输入用户名:") ;
-    switch(choose)
-    {      case 1 :
 
          scanf("%s",userName) ;
          while(p!=NULL) 
          {
              
-             if(!strcmp(userName,p->student.userName ))
+             if(!strcmp(userName,p->date.userName ))
              {int times = 3 ;
                 while(times--)
                {
@@ -223,7 +306,7 @@ int login(int choose)
    
                                
                   scanf("%s",code) ;
-                   if(strcmp(code,p->student.code))
+                   if(strcmp(code,p->date.code))
                    {
                        printf("密码错误\n还剩%d次机会\n",times) ;
                        
@@ -265,69 +348,7 @@ int login(int choose)
          
          
 
-         break ;
-         case 2 :
 
-         scanf("%s",userName) ;
-         while(p!=NULL) 
-         {
-             
-
-             if(!strcmp(userName,p->teacher.userName ))
-             {int times = 3 ;
-                while(times--)
-               {
-                  printf("检请输入密码:") ;
-    
-                  scanf("%s",code) ;
-                   if(strcmp(code,p->teacher.code))
-                   {
-                       printf("密码错误\n还剩%d次机会\n",times) ;
-                       
-                 
-
-                   }
-                   else
-                   {
-                    return 1 ;
-                   }
-
-
-                  //  printf("登录成功\n") ;
-                  //  printf("欢迎用户 %s \n",p->teacher.userName ) ;
-                  //  printf("正在前往教师专属页面.......\n") ;
-                  //  printf("按任意键继续......\n") ;
-                  //  TimeOut() ;
-                   
-
-
-
-
-               }
-               printf("输入三次密码错误,请重新登录\n") ;
-               return 0 ;
-               
-
-
-                 
-             }
-             else
-             {
-               printf("正在检测用户数据......\n") ;
-             } 
-             p = p->next ;
-
-         } 
-          printf("未检测到用户名\n请确认该用户是否存在\n") ;
-          printf("按任意键返登录界面\n\n") ;
-
-          TimeOut() ;
-          return 0;
-         
-         
-
-         break ;
-    }
      
      
     return 0 ;
@@ -373,10 +394,9 @@ void Register()
   //p =tail ;
    //新建结构体
    accout temp ;
-   temp.student.login = 0 ; 
-   temp.teacher.login = 0 ;
+  
    //两个功能，注册学生账号，和教师账号
-   printf("注册学生账号请按1,师生账号请按2,退出请按0\n") ;
+   printf("注册账号请按1,师生账号请按2,退出请按0\n") ;
     int a ;
 RegisterCina: 
     scanf("%d",&a) ;
@@ -384,38 +404,14 @@ RegisterCina:
    switch (a) 
    {
          case 1 :
-         printf("请输入账号名\n") ;
-registerStudentUsername: 
-         scanf("%s",temp.student.userName) ;
-         //检测数据库中是否含有该账号
-          if( RepeatUsername(temp.student.userName ))
-          {
-             printf("已有该用户存在，请重新输入用户名\n") ;
-             goto registerStudentUsername ;
+       
+          temp.date.login = 1 ;
 
-          }
-
-          printf("请输入密码\n") ;
-          scanf("%s",temp.student.code) ;
-          temp.student.login = 1 ;
           break ;
-         case 2 :
-         printf("请输入账号名\n") ;
-registerTeacherUsername: 
-         scanf("%s",temp.teacher.userName) ;
-         //检测数据库中是否含有该账号
-          if( RepeatUsername(temp.teacher.userName ))
-          {
-             printf("已有该用户存在，请重新输入用户名\n") ;
-             goto registerTeacherUsername ;
-
-          }
-
-          printf("请输入密码\n") ;
-          scanf("%s",temp.teacher.code) ;
-
-              temp.teacher.login = 1 ;
+          case 2 :
+          temp.date.login=2 ;
           break ;
+
           case 0 :
           printf("正在返回主界面\n\n") ;
 
@@ -430,13 +426,26 @@ registerTeacherUsername:
 
 
    }
-   //添加链表
+   
 
+  printf("请输入账号名\n") ;
+registerStudentUsername: 
+         scanf("%s",temp.date.userName) ;
+         //检测数据库中是否含有该账号
+          if( RepeatUsername(temp.date.userName ))
+          {
+             printf("已有该用户存在，请重新输入用户名\n") ;
+             goto registerStudentUsername ;
+
+          }
+
+          printf("请输入密码\n") ;
+          scanf("%s",temp.date.code) ;
 
    
    
-
-    ListAccoutAdd(&temp) ;
+//添加到链表
+    ListAccoutAdd(temp) ;
     printf("正在添加账号到链表中.....\n") ;
     // printf("添加成功\n") ;
     // printf("请到主界面登录\n") ;
@@ -455,35 +464,44 @@ void Inital()
      p->next = NULL ;
      head = p ;
      tail = p ;
-     FILE *fp = fopen("//Users//jack5//c语言项目//学生信息管理系统//accout","r") ;
+     FILE *fp = fopen("accout.txt","r") ;
      if(fp==NULL)
-     {
-      printf("初始化失败,请联系管理员\n") ;
-      fclose(fp) ;
+     { fclose(fp) ;
+      printf("正在配置文件夹\n") ;
+      FILE *fp = fopen("accout.txt","w") ;
+       fclose(fp) ;
+       printf("配置成功!\n");
+       printf("由于您是第一次登录,请先注册一个账号\n") ;
+       Register() ; 
       return ;
      }
       
 
-     char str[10000] ;
-     while( fgets(str, sizeof(str), fp) != NULL )
-     {
-              accout* temp = (accout*)malloc(sizeof(accout)) ;
-              sscanf(str,"%d %d %*s %*s",&temp->student.login,&temp->teacher.login) ;
-              if(temp->student.login)
-              {
-                  sscanf(str,"%*d %*d %s %s",temp->student.userName,temp->student.code) ;
-              }
-              else if(temp->teacher.login)
-              {
-                  sscanf(str,"%*d %*d %s %s",temp->teacher.userName,temp->teacher.code) ;
+     char line[1000] ;
+     while( fgets(line, sizeof(line), fp) != NULL )
+     {    char *tok= strtok(line," ") ;
+         accout* temp = (accout*)malloc(sizeof(accout)) ;
 
-              }
+        sscanf(tok,"%d",&temp->date.login ) ;
+        tok = strtok(NULL," ") ;
+
+        sscanf(tok,"%s",temp->date.userName ) ;
+        tok=strtok(NULL," ") ;
+        sscanf(tok,"%s",temp->date.code) ;
+        tok=strtok(NULL," ") ;
+        sscanf(tok,"%s",temp->date.name) ;
+        tok=strtok(NULL," ") ;
+
+
+        while(tok!=NULL)
+        {
+              //待添加数据
+        }
+
               tail->next = temp ;
               tail = temp ;
               tail->next = NULL ;
               printf("正在初始化链表.....\n") ;
-              
-
      }
 
 
@@ -500,7 +518,7 @@ void Inital()
  void Recover()
  {
           //清空文件
-       FILE*fp = fopen("//Users//jack5//c语言项目//学生信息管理系统//accout","w") ;
+       FILE*fp = fopen("accout.txt","w") ;
        if(fp==NULL)
        {
          printf("写入文件失败，请联系管理员\n") ;
@@ -509,20 +527,15 @@ void Inital()
        }
        else
        {
-        p = head ;
+        p = head->next ;
         while(p!=NULL)
         {
-            if(p->student.login)
-            {   printf("正在保存数据........\n") ;
-                 fprintf(fp,"%d %d %s %s \n",p->student.login,p->teacher.login,p->student.userName,p->student.code)  ;
+           
+             printf("正在保存数据........\n") ;
+                 fprintf(fp,"%d  %s %s %s\n",p->date.login,p->date.userName,p->date.code,p->date.name)  ;
                      
-            }
-            else if(p->teacher.login)
-            {
-                  printf("正在保存数据........\n") ;
-                 fprintf(fp,"%d %d %s %s \n",p->student.login,p->teacher.login,p->teacher.userName,p->teacher.code)  ;
-                     
-            }
+           
+        
             p=p->next ;
 
         }
@@ -555,17 +568,14 @@ int RepeatUsername(char userName[] )
 {
    
     //遍历链表
-    accout *temp = head ;
+    accout *temp = head->next ;
     while(temp!=NULL)
     {
-        if(!strcmp(temp->student.userName,userName) )      
+        if(!strcmp(temp->date.userName,userName) )      
         {
          return 1 ;
         }
-         if(!strcmp(temp->teacher.userName,userName) )      
-        {
-         return 1 ;
-        }
+   
  
        temp = temp->next ;
     }
@@ -576,17 +586,15 @@ int RepeatUsername(char userName[] )
      
 }
 //添加链表 原理
-void ListAccoutAdd(accout * TempAdd)
+void ListAccoutAdd(accout  TempAdd)
 {
      
-     accout*temp = (accout*)malloc(sizeof(accout)) ;
-     strcpy(temp->student.userName,TempAdd->student.userName) ;
-     strcpy(temp->student.code,TempAdd->student.code) ;
-     strcpy(temp->teacher.userName,TempAdd->teacher.userName) ;
-     strcpy(temp->teacher.code,TempAdd->teacher.code) ;
-         temp->student.login = TempAdd->student.login ;
-         temp->teacher.login = TempAdd->teacher.login ;
          //待添加
+   struct accout *temp = (struct accout*)malloc(sizeof(struct accout)) ;
+   temp->date.login = TempAdd.date.login ;
+   strcpy(temp->date.userName,TempAdd.date.userName) ;
+   strcpy(temp->date.code,TempAdd.date.code) ;
+   strcpy(temp->date.name,TempAdd.date.name) ;
      tail ->next = temp ;
      tail = temp ;
      tail->next = NULL ;
@@ -599,7 +607,7 @@ void ListAccoutAdd(accout * TempAdd)
 //学生页面绘图
 void studentMenu()
 {     
-      printf("目前登录账号:%s",p->student.userName) ;
+      printf("目前登录账号:%s",p->date.userName) ;
       printf("目前所在页面:学生页面") ;
       printf("------按1修改信息------") ;
       printf("------按2补充信息------") ;
