@@ -41,10 +41,10 @@ struct Date
 {
       int login;
    //用户名
-   char userName[STRINGLEN] ;
+   char userName[STRINGLEN] = "" ;
    //密码
-   char code[STRINGLEN] ;
-   char name[STRINGLEN] ;
+   char code[STRINGLEN]="" ;
+   char name[STRINGLEN] ="";
 
 
 };
@@ -71,7 +71,7 @@ void menuLogin();
 void loginChoose() ;
 int checkFileEmpty() ;
 void TimeOut();
-int login();
+struct accout* login();
 void Recover() ;
 void Inital() ;
 int RepeatUsername(char userName[] );
@@ -106,6 +106,7 @@ struct accout* FoundList()
        
         p=p->next ;
      }
+     printf("未找到用户名请判断您所输入的用户名是否正确!\n") ;
      return NULL ;
 }
 //链表长度 返回链表数据个数
@@ -136,6 +137,20 @@ int ListLen()
      return p ;
      
 }
+//删除重载版
+ struct accout * ListDelte(struct accout*p1)
+{      
+     
+     p1 = ListBack(p1) ;
+     struct accout *temp = p1->next ;
+     p1->next = temp->next ;
+     free(temp) ;
+     printf("删除成功!\n") ;
+     return p ;
+     
+}
+
+
 //实现链表的上一个位
 struct accout*ListBack(struct accout*p1 )
 {
@@ -171,9 +186,102 @@ void FileListRead(struct accout * temp , FILE*fp)
 {
 
 }
+//链表修改
+int ChangeList()
+{
+     if( !FoundList()) return 0 ;
+     
+}
+int ChangeList(struct accout*p1)
+{
+      if(CodeList(p1))
+      {
+       while(1)
+       {
+         printf("请输入要更改的内容 1为账号名 2为密码 3为真实姓名 4返回\n") ;
+         int a ;
+         scanf("%d",&a) ;
+         switch(a)
+         {
+              case 1 : 
+              char username[STRINGLEN] ;
+              scanf("%s",username) ;
+              strcpy(p1->date.userName,username) ;
+              printf("修改成功\n") ;
+             PrintList(p1) ;
+              break ;
+              case 2 :
+              char code[STRINGLEN] ;
+                  scanf("%s",code) ;
+              strcpy(p1->date.userName,code) ;
+              printf("修改成功\n") ;
+                  PrintList(p1) ;
+              break ;
+              case 3:
+              char code[STRINGLEN] ;
+                  scanf("%s",code) ;
+              strcpy(p1->date.userName,code) ;
+              printf("修改成功\n") ;
+                  PrintList(p1) ;
+
+              case 4:
+              printf("正在返回......\n");
+              printf("按任意键继续\n") ;
+              TimeOut() ;
+              return 0  ;
+              break ;
 
 
+         }     
+       } 
+      }
+      else 
+      {
+         printf("正在返回.....\n") ;
+         printf("按任意键继续\n") ;
+         TimeOut() ;
+       }
+}
+//链表密码判定
+int CodeList(struct accout*p1)
+{
+    int times = 3 ;
+    char code[STRINGLEN];
+                while(times--)
+               {
+                  printf("请输入密码:") ;
+   
+                               
+                  scanf("%s",code) ;
+                   if(strcmp(code,p1->date.code))
+                   {
+                       printf("密码错误\n还剩%d次机会\n",times) ;
+                       
+                    
 
+                   }
+                   else
+                   {
+                    return 1 ;
+                   }
+
+               }
+                 printf("输入三次密码错误,请重新尝试\n") ;
+                    return 0 ;
+}
+//链表展示
+void PrintList(struct accout*p1)
+{
+     printf("账号login:%d 用户名:%s真是姓名:%s\n",p1->date.login,p1->date.userName,p1->date.name) ;
+}
+void PrintList()
+{   p = head->next ;
+    while(p!=NULL)
+    {
+     printf("账号login:%d 用户名:%s 真是姓名:%s\n",p->date.login,p->date.userName,p->date.name) ;
+   p = p->next ;
+    }
+} 
 
 
 //第一部分登录与初始化函数-------------------
@@ -217,14 +325,27 @@ loginChooseCina :
 
       
         case  1 :
-
-      if(  login() ) 
+    struct accout *p1 = head ;
+      if(  p1=login() ) 
       {
-       int  login = p->date.login ;
+       int  login = p1->date.login ;
       switch(login)
       {
          case 1 :
-   //教师界面函数
+   //学生界面
+       if(studentMenuChoose(p1) )
+       {
+          return ; 
+       }
+       else 
+       {
+            printf("感谢您的再次使用\n") ;
+           printf("按任意键退出\n") ;
+
+        TimeOut() ;
+          return ;
+       }
+     
           break ;
                     
         case  2 :
@@ -271,7 +392,7 @@ loginChooseCina :
 }
 //登录功能
 //原理通过用户名来检查链表数据 如果对的话 p指向账号
-int login()
+struct accout* login()
 {    //检测第一次
   //    FILE*fp =fopen("//Users//jack5//c语言项目//学生信息管理系统//accout","r") ;
   //    if(fp==NULL)
@@ -299,40 +420,10 @@ int login()
          {
              
              if(!strcmp(userName,p->date.userName ))
-             {int times = 3 ;
-                while(times--)
-               {
-                  printf("请输入密码:") ;
-   
-                               
-                  scanf("%s",code) ;
-                   if(strcmp(code,p->date.code))
-                   {
-                       printf("密码错误\n还剩%d次机会\n",times) ;
-                       
-                    
-
-                   }
-                   else
-                   {
-                    return 1 ;
-                   }
-
-
-                  //  printf("登录成功\n") ;
-                  //  printf("欢迎用户 %s \n",p->student.userName ) ;
-                  //  printf("正在前往学生专属页面.......\n") ;
-                  //  printf("按任意键继续......\n") ;
-                  //  TimeOut() ;
-                
-
-
-
-
-               }
-                 printf("输入三次密码错误,请重新登录\n") ;
-                    return 0 ;
-             }
+          {
+              if(CodeList(p)) return p ;
+              else return NULL ;
+          }
              else
              {
                printf("正在检测用户数据......\n") ;
@@ -344,7 +435,7 @@ int login()
           printf("按任意键返登录界面\n\n") ;
 
           TimeOut() ;
-          return 0 ;
+          return NULL ;
          
          
 
@@ -605,12 +696,12 @@ void ListAccoutAdd(accout  TempAdd)
 //修改身份信息 用户名 密码  性别 地址 电话 教师
 //
 //学生页面绘图
-void studentMenu()
+void studentMenu(struct accout*p1)
 {     
-      printf("目前登录账号:%s",p->date.userName) ;
+      printf("目前登录账号:%s",p1->date.userName) ;
       printf("目前所在页面:学生页面") ;
       printf("------按1修改信息------") ;
-      printf("------按2补充信息------") ;
+      printf("------按2查看信息------") ;
       printf("------按3退出登录------") ;
       printf("------按4注销账号------") ;
       printf("------按5查看成绩------") ;
@@ -620,17 +711,69 @@ void studentMenu()
 
 }
 //学生页面选项()
-void studentMenuChoose()
+int studentMenuChoose(struct accout*p1)
 {
       while(1)
       { 
-        studentMenu() ;
+        studentMenu(p1) ;
         int a ;
         scanf("%d",&a) ;
 
         switch(a)
         {
+                case 1:
+                ChangeList(p1) ;
+                break ;
+                case 2 :
+                PrintList(p1) ;
+                printf("按任意键继续\n") ;
+                TimeOut() ;
+                break ;
+                case 3 :
+                printf("正在退出....") ;
+                printf("按任意键继续\n");
+                TimeOut() ;
+                return 1 ;
+                case 4 :
+                printf("确定要删除吗?\n");
+                printf("继续按1 返回按0") ;
+                int b;
+                scanf("%d",&b);
+                if(b==1)
+                {
+                     printf("注意此操作无法撤销，一旦销毁用户数据将消失!\n");
+                     printf("注意此操作无法撤销，一旦销毁用户数据将消失!\n");
+                     printf("注意此操作无法撤销，一旦销毁用户数据将消失!\n");
+                     printf("继续按1 放回按0");
+                     int c ;
+                     scanf("%d",&c) ;
+                     if(c==1)
+                     {
+                         ListDelte(p1) ;
 
+                     }
+                     else 
+                     {
+                         printf("正在返回....\n") ;
+                         break ;
+                     }
+                }
+                else 
+                {printf("正在返回....\n") ;
+                  break ;
+                }
+                
+                break ;
+                case 5:
+                //待实现
+                break ;
+                case 0 :
+                return 0 ;
+                break ;
+                
+                
+                
+                
         }
 
 
