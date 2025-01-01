@@ -12,6 +12,8 @@
 //宏定义处 
 //string lne 字符串长度
 #define STRINGLEN 100
+//数据数量大小
+#define ACCOUNTNUM 100 
 //类定义处-------------------
 // struct student
 // {  //用于标记是否为学生账号
@@ -41,13 +43,14 @@ struct Date
 {
       int login;
    //用户名
-   char userName[STRINGLEN] = "" ;
+   char userName[STRINGLEN]  ;
    //密码
-   char code[STRINGLEN]="" ;
-   char name[STRINGLEN] ="";
+   char code[STRINGLEN];
+   char name[STRINGLEN] ;
 
 
 };
+
 // struct op
 // {
 //     int login ;
@@ -62,6 +65,7 @@ struct accout
        //date数据
        Date date ;
        accout * next ;
+        
 
 
 };
@@ -78,9 +82,26 @@ int RepeatUsername(char userName[] );
 void ListAccoutAdd(accout  TempAdd) ;
 void Register();
 struct accout*ListBack(struct accout*p1 );
+struct accout* FoundList();
+int ListLen();
+struct accout * ListDelte();
+struct accout * ListDelte(struct accout*p1);
+struct accout*ListBack(struct accout*p1 );
+int SwapList(struct accout *p1 ,struct accout*p2 );
+void FileListRead(struct accout * temp , FILE*fp);
+int ChangeList(struct accout*p1);
+int ChangeList();
+int CodeList(struct accout*p1);
+void PrintList(struct accout*p1);
+void PrintList();
+int studentMenuChoose(struct accout*p1);
+
 //-------------------------
 //全局变量定义处---------------------
 accout *head,*p,*tail ;
+int tNum ;
+struct accout * AccoutArr[ACCOUNTNUM] ;
+
 
 
 
@@ -190,7 +211,7 @@ void FileListRead(struct accout * temp , FILE*fp)
 int ChangeList()
 {
      if( !FoundList()) return 0 ;
-     
+     return 1 ;
 }
 int ChangeList(struct accout*p1)
 {
@@ -213,14 +234,14 @@ int ChangeList(struct accout*p1)
               case 2 :
               char code[STRINGLEN] ;
                   scanf("%s",code) ;
-              strcpy(p1->date.userName,code) ;
+              strcpy(p1->date.code,code) ;
               printf("修改成功\n") ;
                   PrintList(p1) ;
               break ;
               case 3:
-              char code[STRINGLEN] ;
-                  scanf("%s",code) ;
-              strcpy(p1->date.userName,code) ;
+              char name[STRINGLEN] ;
+                  scanf("%s",name) ;
+              strcpy(p1->date.name,name) ;
               printf("修改成功\n") ;
                   PrintList(p1) ;
 
@@ -240,6 +261,7 @@ int ChangeList(struct accout*p1)
          printf("正在返回.....\n") ;
          printf("按任意键继续\n") ;
          TimeOut() ;
+         return 0 ;
        }
 }
 //链表密码判定
@@ -282,7 +304,13 @@ void PrintList()
    p = p->next ;
     }
 } 
+//链表排序 
+void sore(struct accout * p1 )
+{
+     int login = p1->date.login ;
+     
 
+}
 
 //第一部分登录与初始化函数-------------------
 //实现按任意键退出
@@ -318,14 +346,15 @@ void loginChoose()
       int a = -1 ;
      // while((getchar())!='\n') ;
      // a = getchar() ;
-loginChooseCina :
+
       scanf("%d",&a) ;
       switch (a)
        {
 
       
         case  1 :
-    struct accout *p1 = head ;
+
+    {struct accout *p1 = head ;
       if(  p1=login() ) 
       {
        int  login = p1->date.login ;
@@ -335,7 +364,7 @@ loginChooseCina :
    //学生界面
        if(studentMenuChoose(p1) )
        {
-          return ; 
+         
        }
        else 
        {
@@ -345,12 +374,14 @@ loginChooseCina :
         TimeOut() ;
           return ;
        }
-     
+
+      
           break ;
                     
         case  2 :
           //教师界面函数调用    
            break ;
+      }
 
       }
       }
@@ -381,9 +412,10 @@ loginChooseCina :
            return ;
            break ;
            
-        default:
+        default :
         printf("请您输入正常的选项\n") ;
-        goto loginChooseCina ;
+        break ;
+      
 
 
        }
@@ -700,13 +732,13 @@ void studentMenu(struct accout*p1)
 {     
       printf("目前登录账号:%s",p1->date.userName) ;
       printf("目前所在页面:学生页面") ;
-      printf("------按1修改信息------") ;
-      printf("------按2查看信息------") ;
-      printf("------按3退出登录------") ;
-      printf("------按4注销账号------") ;
-      printf("------按5查看成绩------") ;
-      printf("------按0退出系统------") ;
-      printf("---------------------") ;
+      printf("------按1修改信息------\n") ;
+      printf("------按2查看信息------\n") ;
+      printf("------按3退出登录------\n") ;
+      printf("------按4注销账号------\n") ;
+      printf("------按5查看成绩------\n") ;
+      printf("------按0退出系统------\n") ;
+      printf("---------------------\n") ;
 
 
 }
@@ -750,6 +782,7 @@ int studentMenuChoose(struct accout*p1)
                      if(c==1)
                      {
                          ListDelte(p1) ;
+                         return 1 ;
 
                      }
                      else 
