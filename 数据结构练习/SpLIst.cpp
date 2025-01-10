@@ -57,6 +57,19 @@ void IncreaseSize(SeqList &L,int len)
  L.MaxSeqSize+=len ;
  free(p) ;
 }
+//查找
+int GetInt(SpList L , int i)
+{
+       return L.date[i-1] ;
+}
+//按值查找
+int LocateInt (SpList L , int e )
+{
+       for(int i = 0 ; i<L.length ; i++)
+        if(L.date[i]==e) return i+1 ;//相等放回位序
+        return 0 ;
+}
+
 int main()
 {
      SpList L ;
