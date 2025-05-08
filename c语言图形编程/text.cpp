@@ -1,7 +1,13 @@
-#include <graphics.h> // Ensure the graphics library is installed and the path is correct
-#include<conio.h>
-#include<stdio.h>
+#include<bits/stdc++.h>
+using namespace std;
 int main()
 {
-      ini
+      double arr[100];
+      for (int i = 1; i <= 10;i++)
+            cin >> arr[i];
+      for (int i = 1; i <= 10;i++)
+      {
+            double ans = 2.926 / 120 * arr[i];
+            cout << ans << endl;
+      }
 }
