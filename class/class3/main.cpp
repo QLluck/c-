@@ -8,5 +8,5 @@ int main()
     zhonDFS(t);
     cout << '\n';
     houDFS(t);
-
+   cout<<"叶节点个数为"<<tNum(t)<<'\n';
 }

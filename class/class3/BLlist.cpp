@@ -26,16 +26,21 @@ void xianDFS(BLN*t)
 void zhonDFS(BLN*t)
 {
     if(t->lc)
-        xianDFS(t->lc);
+        zhonDFS(t->lc);
     cout << t->data;
     if(t->rc)
-        xianDFS(t->rc);
+        zhonDFS(t->rc);
 }
 void houDFS(BLN*t)
 {
     if(t->lc)
-        xianDFS(t->lc);
+        houDFS(t->lc);
         if(t->rc)
-            xianDFS(t->rc);
+            houDFS(t->rc);
     cout << t->data;
+}
+int tNum(BLN*t)
+{
+     if(!t->lc&&!t->rc)return 1;
+     else  return (t->lc?tNum(t->lc):0) + (t->rc?tNum(t->rc):0);
 }
