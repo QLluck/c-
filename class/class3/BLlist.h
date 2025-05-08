@@ -13,4 +13,5 @@ BLN *createBL();
 void xianDFS(BLN *t);
 void zhonDFS(BLN *t);
 void houDFS(BLN *t);
+int tNum(BLN*t);
 #endif //bLLIST
