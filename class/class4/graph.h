@@ -17,11 +17,13 @@ typedef struct list
 
 typedef struct Graph
 {
-    L* h[MAX_SIZE];
+    L* h[MAX_SIZE+1];
     int head;
+    int num;
 }GP;
-
-
-
-
+void init_v(int v, GP *G);
+void insert(L *l, int v, int w);
+void add_e(int u, int v, int w, GP *G);
+void dfs(int x, int index, GP *g,int sum);
+GP *prim(int s, GP *g);
 #endif //GRAPH
